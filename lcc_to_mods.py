@@ -789,6 +789,13 @@ class LCCDatabaseConverter:
         log(f"Converting {len(self.mods_data)} mods...")
 
         for mod_id, base_mod in sorted(self.mods_data.items()):
+            # Check if mod's games contain EET, skip if not
+            games = base_mod.get('games', [])
+            if 'EET' not in games and 'eet' not in games:
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: games does not contain EET")
+                log(f"  Skipping mod ID {mod_id}: games does not contain EET")
+                continue
+
             tp2_name = base_mod.get('tp2', '')
             
             # Skip if tp2 is "non-weidu"
