@@ -30,9 +30,8 @@ def log(message: str = ""):
 def write_json_compact(path: Path, data: Any, indent: int = 2) -> None:
     """
     Write JSON to `path` using a compact formatting rule:
-    - Empty dict/list are written inline `{}` / `[]`
-    - Lists of primitives (str/num/bool/null) are written on a single line
-    - Other structures are pretty-printed with indentation
+    - If file doesn't exist, use compact formatting
+    - If file exists, only update if content actually differs
     """
     def to_json_str(o: Any, level: int = 0) -> str:
         pad = ' ' * (indent * level)
@@ -58,9 +57,65 @@ def write_json_compact(path: Path, data: Any, indent: int = 2) -> None:
             return '[\n' + ',\n'.join(items) + '\n' + pad + ']'
         return json.dumps(o, ensure_ascii=False)
 
-    s = to_json_str(data, 0)
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(s)
+    # Format the new data
+    new_content = to_json_str(data)
+    
+    # Check if the file exists and compare content
+    if path.exists():
+        with open(path, 'r', encoding='utf-8') as f:
+            existing_content = f.read()
+        
+        # Compare the formatted content (ignoring whitespace differences)
+        import re
+        existing_normalized = re.sub(r'\s+', ' ', existing_content).strip()
+        new_normalized = re.sub(r'\s+', ' ', new_content).strip()
+        
+        # Only write if content is actually different
+        if existing_normalized != new_normalized:
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+    else:
+        # File doesn't exist, write the new content
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+
+
+def deep_merge(base_dict, update_dict):
+    """
+    Recursively merge update_dict into base_dict.
+    Preserves values from base_dict when they exist in both dictionaries.
+    Adds new values from update_dict to base_dict.
+    """
+    import collections.abc
+    result = base_dict.copy()
+    
+    for key, value in update_dict.items():
+        if key in result:
+            if isinstance(result[key], dict) and isinstance(value, dict):
+                result[key] = deep_merge(result[key], value)
+            elif isinstance(result[key], list) and isinstance(value, list):
+                # For lists, we'll update primitive lists but merge object lists differently
+                # Check if it's a list of primitives
+                if (all(isinstance(x, (str, int, float, bool, type(None))) for x in result[key]) and
+                    all(isinstance(x, (str, int, float, bool, type(None))) for x in value)):
+                    # It's a list of primitives, replace with the new list
+                    result[key] = value
+                else:
+                    # It's a list of objects/dicts, we'll just add new entries
+                    # Convert to string representations to compare
+                    existing_set = {json.dumps(item, sort_keys=True) for item in result[key]}
+                    for item in value:
+                        item_str = json.dumps(item, sort_keys=True)
+                        if item_str not in existing_set:
+                            result[key].append(item)
+            else:
+                # Replace with the new value
+                result[key] = value
+        else:
+            # New key, add it
+            result[key] = value
+    
+    return result
 
 
 class GameNameMapper:
@@ -124,49 +179,86 @@ class GameNameMapper:
 
 class CategoryMapper:
     """
-    Maps LCC category names to BigWorldSetup category names.
+    Maps category names from LCC format to standardized format.
     
-    Provides category normalization for converting from LCC-Docs format to
-    BigWorldSetup Enhanced Edition standard categories.
+    This class loads category mappings from a JSON file and provides
+    methods to normalize category names from LCC format to standard form.
     """
 
-    MAPPING = {
-        "Quest Packs & Adventures": "quest",
-        "NPCs": "npcs",
-        "Kit": "kit",
-        "Tweak": "tweak",
-        "Spell": "spell",
-        "Item": "item",
-        "Creature": "creature",
-        "Portrait Pack": "portraits",
-        "Sound": "sound",
-        "UI": "ui",
-        "Romance": "romance",
-        "Tactical": "tactical",
-        "Encounter": "encounter",
-        "Mechanics": "mechanics",
-        "Enhancement": "enhancement",
-        "BG2": "bg2",
-        "BG1": "bg1",
-        "Overhaul": "overhaul",
-        "Cosmetic": "cosmetic",
-        "Balance": "balance",
-        "Armor": "armor",
-        "Weapon": "weapon",
-        "Cleric": "cleric",
-        "Druid": "druid",
-        "Fighter": "fighter",
-        "Mage": "mage",
-        "Thief": "thief",
-        "Ranger": "ranger",
-        "Bard": "bard",
-        "Paladin": "paladin",
-        "Monk": "monk",
-        "Sorcerer": "sorcerer",
-    }
+    def __init__(self, category_mappings: Optional[Dict[str, str]] = None):
+        """
+        Initialize category mapper with mappings.
+        
+        Args:
+            category_mappings: Dictionary mapping original category names to normalized names
+        """
+        self.mapping = category_mappings or self._get_default_mappings()
 
     @staticmethod
-    def normalize(category: str) -> str:
+    def _get_default_mappings() -> Dict[str, str]:
+        """
+        Get default category mappings.
+        
+        Returns:
+            Dictionary of default category mappings
+        """
+        return {
+            "Forgeron et marchand": "smith",
+            "PNJ One Day": "npc1d",
+            "Kit": "kit",
+            "Gameplay": "gameplay",
+            "Sort et objet": "spell",
+            "Portrait et son": "portrait",
+            "PNJ (autre)": "npcx",
+            "Quête": "quest",
+            "PNJ recrutable": "npc",
+            "Patch non officiel": "patch",
+            "Cosmétique": "cosm",
+            "Script et tactique": "tactic",
+            "Utilitaire": "util",
+            "Interface": "ui",
+            "Conversion": "conv",
+        }
+
+    @classmethod
+    def load_from_file(cls, file_path: Path):
+        """
+        Load category mappings from a JSON file.
+        
+        Args:
+            file_path: Path to the JSON file containing category mappings
+        
+        Returns:
+            CategoryMapper instance with loaded mappings
+        """
+        if file_path.exists():
+            with open(file_path, 'r', encoding='utf-8') as f:
+                mappings = json.load(f)
+            return cls(mappings)
+        else:
+            print(f"Category mappings file not found: {file_path}")
+            print("Attempting to generate category mappings...")
+            
+            # Import the gen_mapping module to call the function directly
+            try:
+                import gen_mapping
+                
+                # Set the log function so gen_mapping uses the same logging mechanism
+                gen_mapping.set_log_function(log)
+                
+                mappings = gen_mapping.generate_and_save_mappings()
+                
+                # Return a new instance with the generated mappings
+                return cls(mappings)
+            except ImportError as e:
+                print(f"Could not import gen_mapping: {e}")
+            except Exception as e:
+                print(f"Error generating category mappings: {e}")
+            
+            print("Using default mappings")
+            return cls()
+
+    def normalize(self, category: str) -> str:
         """
         Normalize a category name.
         
@@ -174,9 +266,9 @@ class CategoryMapper:
             category: Category name from LCC database
         
         Returns:
-            Normalized category name, or original if not in mapping
+            Normalized category name, or original transformed if not in mapping
         """
-        return CategoryMapper.MAPPING.get(category, category.lower().replace(' ', '-'))
+        return self.mapping.get(category, category.lower().replace(' ', '-'))
 
 
 class AuthorNameNormalizer:
@@ -208,19 +300,29 @@ class AuthorNameNormalizer:
         """
         return self.mappings.get(author_name, author_name)
 
-    def load_from_json(self, json_path: Path):
+    @classmethod
+    def load_from_json(cls, json_path: Path):
         """
         Load author mappings from JSON file.
         
         Args:
             json_path: Path to JSON file with author mappings
+        
+        Returns:
+            AuthorNameNormalizer instance with loaded mappings
         """
         try:
             if json_path.exists():
                 with open(json_path, 'r', encoding='utf-8') as f:
-                    self.mappings = json.load(f)
+                    mappings = json.load(f)
+                return cls(mappings)
+            else:
+                print(f"Author mappings file not found: {json_path}")
+                print("(This is fine - default behavior is to use author names as-is)")
+                return cls()
         except Exception as e:
             log(f"Warning: Could not load author mappings from {json_path}: {e}")
+            return cls()
 
 
 class LCCDatabaseConverter:
@@ -244,25 +346,42 @@ class LCCDatabaseConverter:
         conversion_report: Dictionary tracking conversion statistics
     """
 
-    def __init__(self, lcc_db_path: str, output_path: str):
+    def __init__(self, db_path: str, output_path: str):
         """
-        Initialize the converter.
+        Initialize the converter with database and output paths.
         
         Args:
-            lcc_db_path: Path to lcc-docs/db directory
+            db_path: Path to lcc-docs/db directory
             output_path: Path to data/mods directory
         """
-        self.lcc_db_path = Path(lcc_db_path)
+        self.lcc_db_path = Path(db_path)
         self.output_path = Path(output_path)
-        self.mods_data = {}
-        self.translations = {}
-        self.author_normalizer = AuthorNameNormalizer()
+        
+        # Initialize conversion report
         self.conversion_report = {
             'created': [],
             'merged': [],
             'skipped': [],
             'errors': []
         }
+        
+        # Load category mapper from the generated mappings file
+        category_mappings_file = Path("category_mappings.json")
+        self.category_mapper = CategoryMapper.load_from_file(category_mappings_file)
+        
+        # Load author mappings or initialize with empty dict
+        author_mappings_file = self.output_path.parent / "author_mappings.json"
+        self.author_normalizer = AuthorNameNormalizer.load_from_json(author_mappings_file)
+
+        # Load all translation files
+        self.translations = {}
+        for lang_dir in self.lcc_db_path.iterdir():
+            if not lang_dir.is_dir():
+                continue
+            trans_file = lang_dir / 'mods.json'
+            if trans_file.exists():
+                with open(trans_file, 'r', encoding='utf-8') as f:
+                    self.translations[lang_dir.name] = json.load(f)
 
     @staticmethod
     def sanitize_filename(tp2_name: str) -> Optional[str]:
@@ -419,7 +538,7 @@ class LCCDatabaseConverter:
         if games:
             config['games'] = games
 
-        categories = [CategoryMapper.normalize(c) for c in base_mod.get('categories', [])]
+        categories = [self.category_mapper.normalize(c) for c in base_mod.get('categories', [])]
         if categories:
             config['categories'] = categories
 
@@ -440,22 +559,34 @@ class LCCDatabaseConverter:
         if 'languages' in base_mod and base_mod['languages']:
             # Normalize languages to mapping like { 'en_US': 0, 'fr_FR': 1 }
             langs = base_mod['languages']
+            
+            # Start with existing languages if config already has them, otherwise start fresh
+            if 'languages' in config and isinstance(config['languages'], dict):
+                # Preserve existing languages from the config
+                lang_map = config['languages'].copy()
+            else:
+                lang_map = {}
+                
             if isinstance(langs, dict):
-                config['languages'] = langs
+                # If langs is already a dict, merge with existing lang_map
+                for key, value in langs.items():
+                    if key not in lang_map:
+                        lang_map[key] = value
             else:
                 # langs expected as list of short codes or full codes
                 code_map = {
                     'en': 'en_US', 'en_US': 'en_US',
                     'fr': 'fr_FR', 'fr_FR': 'fr_FR',
-                    'zh': 'zh_CN', 'zh_CN': 'zh_CN', 'zh_CN': 'zh_CN',
+                    'zh': 'zh_CN', 'zh_CN': 'zh_CN', 'cn': 'zh_CN',
                     'pl': 'pl_PL', 'pl_PL': 'pl_PL',
                     'de': 'de_DE', 'de_DE': 'de_DE',
                     'es': 'es_ES', 'es_ES': 'es_ES',
                     'it': 'it_IT', 'it_IT': 'it_IT',
                     'ru': 'ru_RU', 'ru_RU': 'ru_RU',
-                    'cs': 'cs_CZ', 'cs_CZ': 'cs_CZ', 'cz': 'cs_CZ'
+                    'cs': 'cs_CZ', 'cs_CZ': 'cs_CZ', 'cz': 'cs_CZ',
+                    'br': 'pt_BR', 'pt': 'pt_BR', 'pt_BR': 'pt_BR'
                 }
-                mapped = []
+                mapped = list(lang_map.keys())  # Start with existing languages
                 for item in langs:
                     if not item:
                         continue
@@ -468,7 +599,7 @@ class LCCDatabaseConverter:
                             full = 'en_US'
                         elif k == 'fr':
                             full = 'fr_FR'
-                        elif k == 'zh':
+                        elif k == 'zh' or k == 'cn':
                             full = 'zh_CN'
                         elif k == 'pl':
                             full = 'pl_PL'
@@ -482,13 +613,20 @@ class LCCDatabaseConverter:
                             full = 'ru_RU'
                         elif k == 'cs':
                             full = 'cs_CZ'
+                        elif k == 'br':
+                            full = 'pt_BR'
+                        elif k == 'pt':
+                            full = 'pt_BR'
                         else:
                             full = key
                     if full not in mapped:
                         mapped.append(full)
+                
+                # Recreate the lang_map with updated ordering
                 lang_map = {code: idx for idx, code in enumerate(mapped)}
-                if lang_map:
-                    config['languages'] = lang_map
+            
+            if lang_map:
+                config['languages'] = lang_map
         
         if 'status' in base_mod:
             config['status'] = base_mod['status']
@@ -597,6 +735,25 @@ class LCCDatabaseConverter:
         if translations:
             config['translations'] = translations
 
+        # Add placeholder components node if it doesn't exist
+        if 'components' not in config:
+            config['components'] = {
+                "0": {
+                    "type": "std"
+                }
+            }
+            
+            # Add placeholder component name/description in all translation languages
+            if 'translations' in config:
+                for lang_code, lang_data in config['translations'].items():
+                    if isinstance(lang_data, dict):
+                        # Add placeholder for component 0 if not already present
+                        if "0" not in lang_data:
+                            lang_data["0"] = {
+                                "name": "Placeholder Component",
+                                "description": "Placeholder for mod without explicit components"
+                            }
+
         return config
 
     def convert(self, force: bool = False, merge_existing: bool = True) -> int:
@@ -633,6 +790,18 @@ class LCCDatabaseConverter:
 
         for mod_id, base_mod in sorted(self.mods_data.items()):
             tp2_name = base_mod.get('tp2', '')
+            
+            # Skip if tp2 is "non-weidu"
+            if tp2_name.lower() == 'non-weidu':
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: tp2 is non-weidu")
+                log(f"  Skipping mod ID {mod_id}: tp2 is non-weidu")
+                continue
+            
+            # Skip if safe is 0
+            if base_mod.get('safe', 1) == 0:
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: safe is 0")
+                log(f"  Skipping mod ID {mod_id}: safe is 0")
+                continue
             
             # If tp2 is empty or n/a, use the mod name as filename instead
             if not tp2_name or tp2_name.lower() == 'n/a':
@@ -729,7 +898,8 @@ class LCCDatabaseConverter:
             'de': 'de_DE', 'de_DE': 'de_DE',
             'es': 'es_ES', 'es_ES': 'es_ES',
             'ru': 'ru_RU', 'ru_RU': 'ru_RU',
-            'cs': 'cs_CZ', 'cs_CZ': 'cs_CZ', 'cz': 'cs_CZ'
+            'cs': 'cs_CZ', 'cs_CZ': 'cs_CZ', 'cz': 'cs_CZ',
+            'kr': 'ko_KR', 'ko': 'ko_KR', 'ko_KR': 'ko_KR'
         }
 
         def normalize_mapping(langs: Dict[str, Any]) -> Dict[str, Any]:
@@ -942,25 +1112,24 @@ def main():
     )
     parser.add_argument(
         '--log-file',
-        default=None,
-        help='Log file path (optional)'
+        default='lcc_to_mods.log',
+        help='Log file path (default: lcc_to_mods.log)'
     )
 
     args = parser.parse_args()
 
     # Initialize log file first, before any operations
-    if args.log_file:
-        global LOG_FILE
-        LOG_FILE = args.log_file
-        # Write initial header to log file
-        try:
-            with open(LOG_FILE, 'w', encoding='utf-8') as f:
-                f.write("LCC Database to Mods Converter Log\n")
-                f.write("=" * 60 + "\n\n")
-                f.flush()
-        except Exception as e:
-            print(f"Failed to create log file {LOG_FILE}: {e}", file=sys.stderr)
-            LOG_FILE = None
+    # Use the default log file if none specified via command line
+    LOG_FILE = args.log_file
+    # Write initial header to log file
+    try:
+        with open(LOG_FILE, 'w', encoding='utf-8') as f:
+            f.write("LCC Database to Mods Converter Log\n")
+            f.write("=" * 60 + "\n\n")
+            f.flush()
+    except Exception as e:
+        print(f"Failed to create log file {LOG_FILE}: {e}")
+        LOG_FILE = None
 
     # Get workspace root and resolve paths
     workspace_root = Path(__file__).parent
