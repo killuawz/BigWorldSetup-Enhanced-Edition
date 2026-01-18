@@ -149,12 +149,13 @@ class CacheInitializer:
 class ApplicationInitializer:
     """Handles application initialization in stages."""
 
-    def __init__(self, app: QApplication):
+    def __init__(self, app: QApplication, skip_update: bool = True):
         """
         Initialize application initializer.
 
         Args:
             app: QApplication instance
+            skip_update: Flag to control whether updates should be skipped
         """
         self.app = app
         self.splash = None
@@ -162,6 +163,7 @@ class ApplicationInitializer:
         self.window = None
         self.data_updater = None
         self.cache_initializer = None
+        self.skip_update = skip_update  # 默认为True，即跳过更新
 
     def run(self) -> tuple[MainWindow, StateManager]:
         """
@@ -220,7 +222,11 @@ class ApplicationInitializer:
         return state
 
     def _check_and_update_data(self) -> None:
-        """Check for and apply data updates if available."""
+        """Check for and apply data updates if enabled."""
+        if self.skip_update:
+            logger.info("Skipping data updates as per configuration")
+            return
+        
         self.data_updater = DataUpdater()
         self.data_updater.status_changed.connect(self.splash.set_status)
         self.data_updater.update_error.connect(self._on_update_data_error)
@@ -407,7 +413,20 @@ def main() -> int:
         stylesheet = load_stylesheet()
         app.setStyleSheet(stylesheet)
 
-        initializer = ApplicationInitializer(app)
+        # Parse command line arguments to determine if update should be skipped
+        import argparse
+        parser = argparse.ArgumentParser(description=f'{APP_NAME} v{APP_VERSION}')
+        parser.add_argument(
+            '--update-data', 
+            action='store_true',
+            help='Enable checking and updating data files (default: disabled)'
+        )
+        
+        args = parser.parse_args(sys.argv[1:])
+        skip_update = not args.update_data  # Default is True (skip update)
+
+        # Create initializer with appropriate skip_update setting
+        initializer = ApplicationInitializer(app, skip_update=skip_update)
         window, state = initializer.run()
 
         window.show()
