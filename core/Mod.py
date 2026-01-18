@@ -247,8 +247,8 @@ class Mod:
 
         # Optional links
         links = data.get("links")
-        self.homepage: str | None = links.get("homepage")
-        self.readme: str | None = links.get("readme")
+        self.homepage: str | None = links.get("homepage") if links else None
+        self.readme: str | None = links.get("readme") if links else None
 
         # Other
         self.safe: int = data.get("safe", 2)
