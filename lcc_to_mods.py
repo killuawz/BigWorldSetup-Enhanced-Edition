@@ -791,23 +791,25 @@ class LCCDatabaseConverter:
         for mod_id, base_mod in sorted(self.mods_data.items()):
             # Check if mod's games contain EET, skip if not
             games = base_mod.get('games', [])
+            mod_name = base_mod.get('name', 'Unknown Mod')  # Define mod_name once at the beginning
+            
             if 'EET' not in games and 'eet' not in games:
-                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: games does not contain EET")
-                log(f"  Skipping mod ID {mod_id}: games does not contain EET")
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id} ({mod_name}): games does not contain EET")
+                log(f"  Skipping mod ID {mod_id} ({mod_name}): games does not contain EET")
                 continue
 
             tp2_name = base_mod.get('tp2', '')
             
             # Skip if tp2 is "non-weidu"
             if tp2_name.lower() == 'non-weidu':
-                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: tp2 is non-weidu")
-                log(f"  Skipping mod ID {mod_id}: tp2 is non-weidu")
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id} ({mod_name}): tp2 is non-weidu")
+                log(f"  Skipping mod ID {mod_id} ({mod_name}): tp2 is non-weidu")
                 continue
             
             # Skip if safe is 0
             if base_mod.get('safe', 1) == 0:
-                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: safe is 0")
-                log(f"  Skipping mod ID {mod_id}: safe is 0")
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id} ({mod_name}): safe is 0")
+                log(f"  Skipping mod ID {mod_id} ({mod_name}): safe is 0")
                 continue
             
             # If tp2 is empty or n/a, use the mod name as filename instead
@@ -819,8 +821,8 @@ class LCCDatabaseConverter:
                 sanitized_tp2 = self.sanitize_filename(tp2_name)
             
             if not sanitized_tp2:
-                self.conversion_report['skipped'].append(f"Mod ID {mod_id}: no valid filename source")
-                log(f"  Skipping mod ID {mod_id}: no valid filename source")
+                self.conversion_report['skipped'].append(f"Mod ID {mod_id} ({mod_name}): no valid filename source")
+                log(f"  Skipping mod ID {mod_id} ({mod_name}): no valid filename source")
                 continue
             
             output_filename = f"{sanitized_tp2}.json"
