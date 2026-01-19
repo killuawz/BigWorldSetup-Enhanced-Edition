@@ -290,6 +290,7 @@ class ModSelectionPage(BasePage):
         self._btn_import: QToolButton | None = None
         self._btn_export: QPushButton | None = None
         self._btn_deselect_all: QPushButton | None = None
+        self._btn_select_all: QPushButton | None = None
 
         # Build UI
         self._create_widgets()
@@ -499,10 +500,15 @@ class ModSelectionPage(BasePage):
         self._btn_export.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_export.clicked.connect(self._export_selection)
 
-        # Export selection
+        # Deselect all
         self._btn_deselect_all = QPushButton()
         self._btn_deselect_all.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_deselect_all.clicked.connect(self._deselect_all)
+
+        # Select all
+        self._btn_select_all = QPushButton()
+        self._btn_select_all.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._btn_select_all.clicked.connect(self._select_all)
 
     def _create_filters_section(self) -> QWidget:
         """Create filters section avec recherche, langues ET violations."""
@@ -634,6 +640,48 @@ class ModSelectionPage(BasePage):
             return
 
         self._selection_controller.clear_all()
+
+    def _select_all(self) -> None:
+        # Ask for confirmation
+        reply = QMessageBox.question(
+            self,
+            tr("page.selection.select_all_confirm_title"),
+            tr("page.selection.select_all_confirm_message"),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Cancel,
+        )
+
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        visible_components = self._get_visible_components()
+        self._selection_controller.select_bulk(visible_components)
+
+    def _get_visible_components(self) -> list[ComponentReference]:
+        """Returns a list of all visible and selectable component references."""
+        components = []
+        proxy_model = self._component_selector._proxy_model
+        source_model = proxy_model.sourceModel()
+
+        def recurse(parent_index):
+            for row in range(proxy_model.rowCount(parent_index)):
+                index = proxy_model.index(row, 0, parent_index)
+                if not index.isValid():
+                    continue
+
+                source_index = proxy_model.mapToSource(index)
+                item = source_model.itemFromIndex(source_index)
+
+                if isinstance(item, TreeItem) and not item.reference.is_mod():
+                    # Only add selectable items
+                    if item.flags() & Qt.ItemFlag.ItemIsUserCheckable:
+                        components.append(item.reference)
+
+                if proxy_model.hasChildren(index):
+                    recurse(index)
+
+        recurse(QModelIndex())
+        return components
 
     # ========================================
     # Validation
@@ -956,7 +1004,7 @@ class ModSelectionPage(BasePage):
 
     def get_additional_buttons(self) -> list[QPushButton]:
         """Get additional buttons."""
-        return [self._btn_deselect_all, self._btn_import, self._btn_export]
+        return [self._btn_select_all, self._btn_deselect_all, self._btn_import, self._btn_export]
 
     def get_previous_button_config(self) -> ButtonConfig:
         """Configure previous button."""
@@ -1044,6 +1092,7 @@ class ModSelectionPage(BasePage):
         self._btn_export.setText(tr("page.selection.btn_export"))
         self._btn_import.setText(tr("page.selection.btn_import"))
         self._btn_deselect_all.setText(tr("page.selection.btn_deselect_all"))
+        self._btn_select_all.setText(tr("page.selection.btn_select_all"))
         self._mod_details_title.setText(tr("page.selection.mod_details_title"))
         self._violation_title.setText(tr("page.selection.violation_title"))
         self._action_import_file.setText(tr("page.selection.action_import_file"))
