@@ -1,5 +1,5 @@
 {
-  "name": "Secret of Bone Hill EET",
+  "name": "Secret of Bone Hill (EET)",
   "version": "34",
   "links": {
     "homepage": "https://www.shsforums.net/files/file/1076-the-secret-of-bonehill/"
@@ -12,10 +12,10 @@
       "download": "https://github.com/RoxanneSHS/BoneHill/archive/refs/tags/v34.zip"
     }
   ],
-  "games": ["bgee", "eet"],
+  "games": ["bgee", "eet", "sod"],
   "categories": ["quest"],
   "components": {
-    "0": {"type": "std"}
+    "0": {"type": "std", "games": ["eet"]}
   },
   "languages": {
     "en_US": 0,

@@ -2,7 +2,8 @@
   "name": "Ascension",
   "version": "2.1.0",
   "links": {
-    "homepage": "https://www.gibberlings3.net/forums/topic/30299-g3-ascension-v20-now-available/"
+    "homepage": "https://www.gibberlings3.net/mods/quests/ascension/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/207-ascension/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Gibberlings3/Ascension/releases/download/2.1.0/ascension-2.1.0.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["quest", "tactic"],
   "components": {
     "0": {"type": "std"},
@@ -30,8 +31,8 @@
     "1500": {"type": "std"},
     "2000": {"type": "std"},
     "2100": {"type": "std"},
-    "2200": {"type": "std"},
-    "2300": {"type": "std"},
+    "2200": {"type": "std", "games": ["bg2ee", "eet"]},
+    "2300": {"type": "std", "games": ["bg2ee", "eet"]},
     "2400": {"type": "std"}
   },
   "languages": {

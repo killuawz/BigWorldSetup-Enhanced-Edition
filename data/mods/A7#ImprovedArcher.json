@@ -2,7 +2,8 @@
   "name": "Improved Archer Kit",
   "version": "4.4",
   "links": {
-    "homepage": "https://www.shsforums.net/topic/58012-improved-archer-kit/"
+    "homepage": "https://www.shsforums.net/topic/58012-improved-archer-kit/",
+    "forums": ["https://www.shsforums.net/topic/58012-improved-archer-kit/", "https://forums.beamdog.com/discussion/34696/mod-improved-archer-kit-for-bgee-bg2ee-iwd-ee-and-original-bg2-bgt"]
   },
   "files": [
     {
@@ -25,14 +26,14 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "tutu", "bgt", "bgee", "bg2ee", "sod", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"],
   "categories": ["kit"],
   "components": {
-    "0": {"type": "std"},
-    "10": {"type": "std"},
-    "20": {"type": "std"},
-    "30": {"type": "std"},
-    "100": {"type": "std", "category": "smith"}
+    "0": {"type": "std", "games": ["bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"]},
+    "10": {"type": "std", "games": ["bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"]},
+    "20": {"type": "std", "games": ["bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"]},
+    "30": {"type": "std", "games": ["bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"]},
+    "100": {"type": "std", "category": "smith", "games": ["bg2ee", "bgt", "eet", "iwdee"]}
   },
   "languages": {
     "en_US": 0,

@@ -2,7 +2,8 @@
   "name": "DLC Merger",
   "version": "1.7",
   "links": {
-    "homepage": "https://github.com/Argent77/A7-DlcMerger"
+    "homepage": "https://github.com/Argent77/A7-DlcMerger",
+    "forums": ["https://forums.beamdog.com/discussion/71305"]
   },
   "files": [
     {
@@ -25,10 +26,10 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bgee", "sod", "bg2ee", "eet", "iwdee", "pstee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "pstee", "sod"],
   "categories": ["util"],
   "components": {
-    "choice_0": {"type": "muc", "components": ["1", "2", "3"]}
+    "choice_0": {"type": "muc", "components": ["1", "2", "3"], "games": ["bgee", "eet", "sod"]}
   },
   "languages": {
     "en_US": 0,

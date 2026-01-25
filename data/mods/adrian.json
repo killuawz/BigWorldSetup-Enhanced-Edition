@@ -1,8 +1,9 @@
 {
-  "name": "Adrian NPC",
+  "name": "Adrian NPC for BGII",
   "version": "6.1",
   "links": {
-    "homepage": "https://www.shsforums.net/files/file/1007-adrian/"
+    "homepage": "http://www.spellholdstudios.net/ie/adrian",
+    "forums": ["https://www.shsforums.net/forum/627-adrian/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Spellhold-Studios/Adrian-NPC/releases/download/v6.1/adrian-npc-for-bgii-v6.1.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1", "2"], "default": "0"},

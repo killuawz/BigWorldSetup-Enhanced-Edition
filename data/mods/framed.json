@@ -2,7 +2,8 @@
   "name": "Framed",
   "version": "1.14",
   "links": {
-    "homepage": "https://www.gibberlings3.net/files/file/1025-framed/"
+    "homepage": "https://www.gibberlings3.net/files/file/1025-framed/",
+    "forums": ["https://www.gibberlings3.net/forums/topic/32638-framed-alternate-chapter-6-for-bgee-and-eet"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Gibberlings3/framed/releases/download/v1.14/framed-v1.14.zip"
     }
   ],
-  "games": ["bgee", "eet"],
+  "games": ["bgee", "eet", "sod"],
   "categories": ["quest"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1"], "default": "0"}

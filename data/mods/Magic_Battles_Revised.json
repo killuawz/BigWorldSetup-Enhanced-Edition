@@ -1,8 +1,9 @@
 {
-  "name": "Magic Battles Revised",
+  "name": "Magic Battles Revised (MBR)",
   "version": "1.9.4",
   "links": {
-    "homepage": "https://www.gibberlings3.net/forums/topic/33351-magic-battles-revised-streamlined-rules-for-mage-duels/"
+    "homepage": "https://github.com/UnearthedArcana/magic_battles_revised",
+    "forums": ["https://www.gibberlings3.net/forums/topic/33351-subtlemods-magic-battles-revised-streamlined-rules-for-mage-duels/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/UnearthedArcana/magic_battles_revised/archive/refs/tags/1.9.4.zip"
     }
   ],
-  "games": ["bgee", "bg2ee", "eet", "iwdee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "sod"],
   "categories": ["gameplay"],
   "components": {
     "10": {"type": "std", "category": "spell"}

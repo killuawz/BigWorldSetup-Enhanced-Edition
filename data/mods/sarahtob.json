@@ -2,7 +2,8 @@
   "name": "Sarah NPC Romance Mod for BG2: ToB",
   "version": "8",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/npcs/sarah/"
+    "homepage": "https://www.gibberlings3.net/mods/npcs/sarah/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/135-sarah/"]
   },
   "files": [
     {
@@ -25,10 +26,10 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc"],
   "components": {
-    "choice_0": {"type": "muc", "components": ["0", "1"], "default": "0"}
+    "choice_0": {"type": "muc", "components": ["0", "1"], "default": "0", "games": ["bg2ee", "bgt", "eet"]}
   },
   "languages": {
     "en_US": 0,

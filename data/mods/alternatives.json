@@ -2,7 +2,8 @@
   "name": "Alternatives",
   "version": "15",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/quests/alternatives/"
+    "homepage": "https://www.gibberlings3.net/mods/quests/alternatives/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/173-alternatives/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Gibberlings3/Alternatives/releases/download/v15/Alternatives_v15.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["quest"],
   "components": {
     "0": {"type": "std"}

@@ -2,7 +2,8 @@
   "name": "Achievements!",
   "version": "3.0",
   "links": {
-    "homepage": "https://www.gibberlings3.net/forums/topic/33035-achievements-for-everyone/"
+    "homepage": "https://www.gibberlings3.net/forums/topic/33035-achievements-for-everyone/",
+    "forums": ["https://www.gibberlings3.net/forums/topic/33035-achievements-for-everyone/"]
   },
   "files": [
     {
@@ -27,7 +28,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bgee", "bg2ee", "sod", "eet", "iwdee", "pstee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "pstee", "sod"],
   "categories": ["util"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1"], "default": "1"},

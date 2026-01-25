@@ -2,7 +2,8 @@
   "name": "Wild Mage Additions",
   "version": "2.4",
   "links": {
-    "homepage": "https://github.com/BGforgeNet/bg2-wildmage?tab=readme-ov-file#new-wild-magic-spells"
+    "homepage": "https://bgforge.net/wild-mage-additions/",
+    "forums": ["https://forums.bgforge.net/viewtopic.php?f=4&t=17"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/BGforgeNet/bg2-wildmage/releases/download/v2.4/wild-mage-additions-v2.4.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bgee", "bg2ee", "sod", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod"],
   "categories": ["kit", "spell"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1"], "default": "0"},

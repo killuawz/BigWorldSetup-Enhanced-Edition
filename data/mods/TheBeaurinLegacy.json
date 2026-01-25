@@ -2,7 +2,8 @@
   "name": "The Beaurin Legacy",
   "version": "5.3",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/npcs/beaurin/"
+    "homepage": "https://www.gibberlings3.net/mods/npcs/beaurin/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/200-the-beaurin-legacy/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://www.gibberlings3.net/files/file/998-beaurin-legacy/?do=download&r=6343&confirm=1&t=1"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc"],
   "components": {
     "1000": {"type": "std"},

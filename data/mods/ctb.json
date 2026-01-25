@@ -2,7 +2,8 @@
   "name": "Check the Bodies",
   "version": "3.1",
   "links": {
-    "homepage": "https://github.com/Spellhold-Studios/Check-the-Bodies"
+    "homepage": "http://www.spellholdstudios.net/ie/ctb",
+    "forums": ["https://www.shsforums.net/forum/196-check-the-bodies/"]
   },
   "files": [
     {
@@ -12,14 +13,14 @@
       "download": "https://github.com/SpellholdStudios/Check_the_Bodies/archive/refs/heads/master.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["quest", "gameplay"],
   "components": {
     "0": {"type": "std"},
     "1": {"type": "std"},
     "2": {"type": "std"},
     "3": {"type": "std"},
-    "4": {"type": "std"},
+    "4": {"type": "std", "games": ["bg2", "bgt"]},
     "5": {"type": "std"}
   },
   "languages": {

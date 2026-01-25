@@ -2,7 +2,8 @@
   "name": "Custom Kits: Spellsword",
   "version": "1.6",
   "links": {
-    "homepage": "https://www.shsforums.net/topic/45487-custom-kits-the-spellsword/"
+    "homepage": "https://www.shsforums.net/topic/45487-custom-kits-the-spellsword/",
+    "forums": ["https://www.shsforums.net/topic/45487-custom-kits-the-spellsword/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://www.shsforums.net/files/download/913-custom-kits-the-spellsword/"
     }
   ],
-  "games": ["bg2", "tutu", "bgt", "bgee", "bg2ee", "sod", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod", "tutu"],
   "categories": ["kit"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1"], "default": "0"}

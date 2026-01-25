@@ -2,7 +2,8 @@
   "name": "Skip Chateau Irenicus",
   "version": "3.5",
   "links": {
-    "homepage": "https://www.shsforums.net/topic/58730-mod-skip-chateau-irenicus"
+    "homepage": "https://www.shsforums.net/topic/58730-mod-skip-chateau-irenicus",
+    "forums": ["https://www.shsforums.net/forum/655-skip-chateau-irenicus/", "https://forums.beamdog.com/discussion/60934/mod-skip-chateau-irenicus"]
   },
   "files": [
     {
@@ -25,11 +26,11 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["gameplay"],
   "components": {
     "0": {"type": "std", "category": "spell"},
-    "choice_0": {"type": "muc", "components": ["101", "102"], "category": "spell", "default": "101"},
+    "choice_0": {"type": "muc", "components": ["101", "102"], "category": "spell", "default": "101", "games": ["bg2ee", "eet"]},
     "200": {"type": "std", "category": "spell"}
   },
   "languages": {

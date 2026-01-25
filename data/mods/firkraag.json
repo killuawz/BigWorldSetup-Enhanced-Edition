@@ -2,7 +2,8 @@
   "name": "Super Firkraag",
   "version": "1.6",
   "links": {
-    "homepage": "https://spellholdstudios.github.io/readmes/firkraag-readme-english.html"
+    "homepage": "https://spellholdstudios.github.io/readmes/firkraag-readme-english.html",
+    "forums": ["https://www.shsforums.net/topic/60737-super-firkraag-updated-to-v16-ee-compatible/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Spellhold-Studios/Super-Firkraag/releases/download/v1.6/super-firkraag-v1.6.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["tactic"],
   "components": {
     "0": {"type": "std"}

@@ -2,7 +2,8 @@
   "name": "The Calling",
   "version": "5",
   "links": {
-    "homepage": "https://www.gibberlings3.net/files/file/999-the-calling/"
+    "homepage": "https://www.gibberlings3.net/mods/quests/thecalling/",
+    "forums": ["https://www.gibberlings3.net/forum/201-the-calling/"]
   },
   "files": [
     {
@@ -25,11 +26,11 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bgt", "bgee", "eet", "tutu"],
+  "games": ["bgee", "bgt", "eet", "sod", "tutu"],
   "categories": ["quest"],
   "components": {
     "0": {"type": "std"},
-    "20": {"type": "std"},
+    "20": {"type": "std", "games": ["bgee", "bgt", "eet", "sod"]},
     "40": {"type": "std", "category": "smith"}
   },
   "languages": {

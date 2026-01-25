@@ -2,7 +2,8 @@
   "name": "Auren Aseph NPC Mod for BG2",
   "version": "12",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/npcs/auren/"
+    "homepage": "https://www.gibberlings3.net/mods/npcs/auren/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/113-auren-aseph/"]
   },
   "files": [
     {
@@ -25,7 +26,7 @@
       "platforms": ["linux"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc"],
   "components": {
     "0": {"type": "std"},

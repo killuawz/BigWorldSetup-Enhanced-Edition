@@ -2,7 +2,8 @@
   "name": "Fading Promises",
   "version": "9",
   "links": {
-    "homepage": "https://www.shsforums.net/forum/528-fading-promises/"
+    "homepage": "http://www.spellholdstudios.net/ie/promises",
+    "forums": ["https://www.shsforums.net/forum/528-fading-promises/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Spellhold-Studios/Fading-Promises/releases/download/v9/fading-promises-v9.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["quest"],
   "components": {
     "0": {"type": "std"}

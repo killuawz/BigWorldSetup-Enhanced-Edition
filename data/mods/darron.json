@@ -2,7 +2,8 @@
   "name": "Darron",
   "version": "2.0.0",
   "links": {
-    "homepage": "https://www.shsforums.net/files/file/842-darron/"
+    "homepage": "https://www.shsforums.net/topic/60916-darron-updated-to-v200-with-new-translations-and-ee-compatibility/",
+    "forums": ["https://www.shsforums.net/forum/234-miscellaneous-released-mods/"]
   },
   "files": [
     {
@@ -12,10 +13,10 @@
       "download": "https://github.com/Spellhold-Studios/Darron/releases/download/v2.0.0/darron-v2.0.0.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["smith"],
   "components": {
-    "0": {"type": "std"}
+    "0": {"type": "std", "games": ["bg2ee", "bgt", "eet"]}
   },
   "languages": {
     "es_ES": 0,

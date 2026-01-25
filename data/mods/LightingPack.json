@@ -2,7 +2,8 @@
   "name": "Shader Pack: Lighting Adjustments for the Enhanced Editions",
   "version": "3.2",
   "links": {
-    "homepage": "https://github.com/Argent77/A7-LightingPackEE"
+    "homepage": "https://github.com/Argent77/A7-LightingPackEE",
+    "forums": ["https://www.shsforums.net/topic/57097-mod-lighting-pack-shader-scripts-for-the-enhanced-edition/", "https://forums.beamdog.com/discussion/36828/mod-lighting-pack-for-the-enhanced-edition"]
   },
   "files": [
     {
@@ -25,7 +26,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bgee", "bg2ee", "sod", "eet", "iwdee", "pstee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "pstee", "sod"],
   "categories": ["cosm"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"], "category": "portrait", "default": "2"},

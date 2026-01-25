@@ -2,7 +2,8 @@
   "name": "Infinity Collection Portrait Pack",
   "version": "2",
   "links": {
-    "homepage": "https://github.com/Gibberlings3/Infinity_Collection_Portrait_Pack"
+    "homepage": "https://www.gibberlings3.net/gallery/album/37-infinity-collection-portrait-pack/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/28-miscellaneous-released-mods/"]
   },
   "files": [
     {
@@ -25,7 +26,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg", "bg2", "tutu", "bgt", "bgee", "bg2ee", "sod", "eet", "iwd", "iwd2", "iwdee"],
+  "games": ["bg", "bg2", "bg2ee", "bgee", "bgt", "eet", "iwd", "iwd2", "iwdee", "sod", "tutu"],
   "categories": ["portrait"],
   "components": {
     "100": {"type": "std"},

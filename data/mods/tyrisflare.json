@@ -2,7 +2,8 @@
   "name": "Tyris Flare NPC",
   "version": "12",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/npcs/tyris/"
+    "homepage": "https://www.gibberlings3.net/mods/npcs/tyris/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/169-tyris-flare/"]
   },
   "files": [
     {
@@ -25,7 +26,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc"],
   "components": {
     "0": {"type": "std"},

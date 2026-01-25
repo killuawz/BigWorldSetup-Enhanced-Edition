@@ -2,7 +2,8 @@
   "name": "RoorenArt's Portrait Pack",
   "version": "3",
   "links": {
-    "homepage": "https://github.com/Gibberlings3/roorenart_bg2"
+    "homepage": "https://www.gibberlings3.net/mods/other/portraitpacks/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/28-miscellaneous-released-mods/"]
   },
   "files": [
     {
@@ -25,10 +26,10 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg", "bg2", "tutu", "bgt", "bgee", "bg2ee", "sod", "eet", "iwd", "iwd2", "iwdee"],
+  "games": ["bg", "bg2", "bg2ee", "bgee", "bgt", "eet", "iwd", "iwd2", "iwdee", "sod", "tutu"],
   "categories": ["portrait"],
   "components": {
-    "10": {"type": "std"},
+    "10": {"type": "std", "games": ["bg1", "bg2", "bg2ee", "bgee", "bgt", "eet", "sod", "tutu"]},
     "20": {"type": "std"}
   },
   "languages": {

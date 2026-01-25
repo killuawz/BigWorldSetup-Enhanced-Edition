@@ -2,7 +2,8 @@
   "name": "Song and Silence: A Mod for Bards and Thieves",
   "version": "19",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/kits/sns/"
+    "homepage": "https://www.gibberlings3.net/mods/kits/sns/",
+    "forums": ["https://www.gibberlings3.net/forum/72-song-and-silence/"]
   },
   "files": [
     {
@@ -25,7 +26,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["kit"],
   "components": {
     "0": {"type": "std", "category": "spell"},
@@ -38,7 +39,7 @@
     "7": {"type": "std"},
     "8": {"type": "std"},
     "9": {"type": "std"},
-    "10": {"type": "std"}
+    "10": {"type": "std", "games": ["bg2", "bgt"]}
   },
   "languages": {
     "en_US": 0,

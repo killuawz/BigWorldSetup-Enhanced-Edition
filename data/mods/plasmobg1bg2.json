@@ -2,7 +2,8 @@
   "name": "Plasmocat's BG NPC Portraits in BG2 Style",
   "version": "5",
   "links": {
-    "homepage": "https://www.gibberlings3.net/files/file/872-plasmocats-bg-npc-portraits-in-bg2-style/"
+    "homepage": "https://www.gibberlings3.net/files/file/872-plasmocats-bg-npc-portraits-in-bg2-style/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/28-miscellaneous-released-mods/", "Homepage", "=", "https://www.gibberlings3.net/gallery/album/16-plasmocats-bg-npcs-in-bg2-style/"]
   },
   "files": [
     {
@@ -25,13 +26,13 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg", "bg2", "tutu", "bgt", "bgee", "bg2ee", "sod", "eet", "iwd", "iwd2", "iwdee"],
+  "games": ["bg", "bg2", "bg2ee", "bgee", "bgt", "eet", "iwd", "iwd2", "iwdee", "sod", "tutu"],
   "categories": ["portrait"],
   "components": {
     "1000": {"type": "std"},
-    "1001": {"type": "std"},
-    "choice_0": {"type": "muc", "components": ["1002", "1003"], "default": "1002"},
-    "choice_1": {"type": "muc", "components": ["1004", "1005"], "default": "1004"}
+    "1001": {"type": "std", "games": ["bg1", "bgee", "bgt", "eet", "sod", "tutu"]},
+    "choice_0": {"type": "muc", "components": ["1002", "1003"], "default": "1002", "games": ["bg1", "bgee", "bgt", "eet", "sod", "tutu"]},
+    "choice_1": {"type": "muc", "components": ["1004", "1005"], "default": "1004", "games": ["bg1", "bgee", "bgt", "eet", "sod", "tutu"]}
   },
   "languages": {
     "en_US": 0,

@@ -2,7 +2,8 @@
   "name": "EEex",
   "version": "0.11.0-alpha",
   "links": {
-    "homepage": "https://github.com/Bubb13/EEex"
+    "homepage": "https://github.com/Bubb13/EEex",
+    "forums": ["https://forums.beamdog.com/discussion/71798/mod-eeex-v0-6-0-alpha/p1"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Bubb13/EEex/releases/download/v0.11.0-alpha/EEex-v0.11.0-alpha.exe"
     }
   ],
-  "games": ["bgee", "bg2ee", "eet", "iwdee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "sod"],
   "categories": ["util"],
   "components": {
     "0": {"type": "std", "category": "patch"},

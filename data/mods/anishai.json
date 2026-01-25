@@ -2,7 +2,8 @@
   "name": "Anishai one-day NPC",
   "version": "3",
   "links": {
-    "homepage": "https://www.gibberlings3.net/files/file/687-anishai-one-day-npc/"
+    "homepage": "https://www.gibberlings3.net/files/file/687-anishai-one-day-npc/",
+    "forums": ["https://www.gibberlings3.net/forums/topic/488-anishai-one-day-npc-released"]
   },
   "files": [
     {
@@ -19,7 +20,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npc1d"],
   "components": {
     "0": {"type": "std"}

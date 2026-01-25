@@ -2,7 +2,10 @@
   "name": "Rodeur de l'ombre",
   "version": "1.2",
   "links": {
-    "homepage": "https://www.baldursgateworld.fr/viewtopic.php?t=23996"
+    "homepage": "https://www.baldursgateworld.fr/viewtopic.php?t=23996",
+    "forums": [
+      "https://www.baldursgateworld.fr/lacouronne/modules-crees-ou-en-cours-de-developpement/12359-kit-rodeur-de-l-ombre-rodeur.html"
+    ]
   },
   "files": [
     {
@@ -12,10 +15,10 @@
       "download": "https://github.com/GwendolyneFreddy/Rodeur_Ombre/releases/download/v1.2/rodeur-de-lombre-v1.2.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bgee", "bg2ee", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod"],
   "categories": ["kit"],
   "components": {
-    "0": {"type": "std"}
+    "0": {"type": "std", "games": ["bg2ee", "bgee", "bgt", "eet", "iwdee", "sod"]}
   },
   "languages": {
     "fr_FR": 0,

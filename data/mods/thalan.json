@@ -2,7 +2,8 @@
   "name": "Thalantyr Item Upgrade",
   "version": "4.5.1",
   "links": {
-    "homepage": "https://www.shsforums.net/topic/57944-thalantyr-item-upgrade-updated-again/"
+    "homepage": "https://www.shsforums.net/topic/57944-thalantyr-item-upgrade-updated-again/",
+    "forums": ["https://forums.beamdog.com/discussion/75981/thalantyr-item-upgrade-bg-ee-eet", "https://www.shsforums.net/topic/57944-thalantyr-item-upgrade-updated-again/"]
   },
   "files": [
     {
@@ -12,10 +13,10 @@
       "download": "https://github.com/CrevsDaak/thalan/archive/refs/heads/master.zip"
     }
   ],
-  "games": ["bg", "tutu", "bgt", "bgee", "sod", "eet"],
+  "games": ["bg", "bgee", "bgt", "eet", "sod", "tutu"],
   "categories": ["smith"],
   "components": {
-    "0": {"type": "std"}
+    "0": {"type": "std", "games": ["bgee", "bgt", "eet", "sod", "tutu"]}
   },
   "languages": {
     "en_US": 0,

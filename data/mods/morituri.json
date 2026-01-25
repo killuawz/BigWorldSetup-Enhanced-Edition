@@ -2,7 +2,8 @@
   "name": "Morituri Kit",
   "version": "5.2",
   "links": {
-    "homepage": "http://www.baldursgatemods.com/forums/index.php?topic=142.0"
+    "homepage": "http://www.baldursgatemods.com/forums/index.php?topic=142.0",
+    "forums": ["https://forums.beamdog.com/discussion/73295/many-old-mods-adapted-for-bg2ee/p1"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/The-Gate-Project/Morituri_Kit/releases/download/v5.2/morituri-kit-5.2.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bgee", "bg2ee", "sod", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod"],
   "categories": ["kit"],
   "components": {
     "choice_0": {"type": "muc", "components": ["35", "36", "37"], "default": "35"}

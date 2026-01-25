@@ -2,7 +2,8 @@
   "name": "Romantic Encounters MOD for Baldur's Gate II",
   "version": "15",
   "links": {
-    "homepage": "https://www.gibberlings3.net/mods/npcs/romantic-encounters/"
+    "homepage": "https://www.gibberlings3.net/mods/npcs/romantic-encounters/",
+    "forums": ["https://www.gibberlings3.net/forums/forum/131-romantic-encounters-bg2/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/Gibberlings3/Romantic_Encounters_BG2/releases/download/v15/RE_v15.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["npcx"],
   "components": {
     "0": {"type": "std"},

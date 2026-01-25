@@ -2,7 +2,8 @@
   "name": "The Chaos Sorcerer: A Wild Magic Kit for Sorcerers",
   "version": "2.11",
   "links": {
-    "homepage": "https://www.shsforums.net/topic/59482-mod-the-chaos-sorcerer-a-wild-magic-kit-for-sorcerers/"
+    "homepage": "https://www.shsforums.net/topic/59482-mod-the-chaos-sorcerer-a-wild-magic-kit-for-sorcerers/",
+    "forums": ["https://www.shsforums.net/topic/59482-mod-the-chaos-sorcerer-a-wild-magic-kit-for-sorcerers/", "https://forums.beamdog.com/discussion/66390/"]
   },
   "files": [
     {
@@ -27,7 +28,7 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bgee", "bg2ee", "sod", "eet", "iwdee"],
+  "games": ["bg2ee", "bgee", "eet", "iwdee", "sod"],
   "categories": ["kit"],
   "components": {
     "0": {"type": "std"},

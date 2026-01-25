@@ -2,7 +2,8 @@
   "name": "Follower_It",
   "version": "6.3",
   "links": {
-    "homepage": "https://www.baldursgateworld.fr/viewtopic.php?p=518215"
+    "homepage": "https://github.com/Deratiseur/Follower_It",
+    "forums": ["https://www.baldursgateworld.fr/viewtopic.php?p=518215#p518215"]
   },
   "files": [
     {
@@ -27,11 +28,11 @@
       "platforms": ["windows"]
     }
   ],
-  "games": ["bg2", "bgt", "bgee", "bg2ee", "eet", "iwdee"],
+  "games": ["bg2", "bg2ee", "bgee", "bgt", "eet", "iwdee", "sod"],
   "categories": ["gameplay"],
   "components": {
     "0": {"type": "std", "category": "npcx"},
-    "choice_0": {"type": "muc", "components": ["1", "2", "3", "4"], "category": "npcx", "default": "1"}
+    "choice_0": {"type": "muc", "components": ["1", "2", "3", "4"], "category": "npcx", "default": "1", "games": ["bg2ee", "eet", "iwdee"]}
   },
   "languages": {
     "fr_FR": 0,

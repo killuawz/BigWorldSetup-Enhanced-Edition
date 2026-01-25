@@ -2,7 +2,8 @@
   "name": "Nanstein",
   "version": "2.2",
   "links": {
-    "homepage": "https://www.baldursgateworld.fr/viewtopic.php?t=31643"
+    "homepage": "https://www.baldursgateworld.fr/viewtopic.php?t=31643",
+    "forums": ["https://www.shsforums.net/files/file/770-nanstein-v13/"]
   },
   "files": [
     {
@@ -12,7 +13,7 @@
       "download": "https://github.com/The-Gate-Project/Nanstein/releases/download/v2.2/nanstein-2.2.zip"
     }
   ],
-  "games": ["bg2", "bgt", "bg2ee", "eet"],
+  "games": ["bg2", "bg2ee", "bgt", "eet"],
   "categories": ["smith"],
   "components": {
     "choice_0": {"type": "muc", "components": ["0", "100"], "default": "0"},
