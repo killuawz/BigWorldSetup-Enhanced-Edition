@@ -7,8 +7,10 @@ from PySide6.QtCore import Qt
 # ============================================================================
 
 APP_NAME = "Big World Setup - Enhanced Edition"
-APP_VERSION = "0.9.7-beta"
+APP_VERSION = "0.9.10-beta"
 APP_ORG = "Selphira"
+
+DATA_SCHEMA_VERSION = "1.0"
 
 # ============================================================================
 # PATHS
@@ -19,6 +21,8 @@ DATA_DIR = Path("data")
 MODS_DIR = DATA_DIR / "mods"
 GAMES_DIR = DATA_DIR / "games"
 RULES_DIR = DATA_DIR / "rules"
+CUSTOM_DIR = DATA_DIR / "custom"
+CUSTOM_MODS_DIR = CUSTOM_DIR / "mods"
 TOOLS_DIR = Path("tools")
 CACHE_DIR = Path(".cache")
 LOG_DIR = Path("logs")
@@ -174,7 +178,7 @@ MAX_SEARCH_LENGTH = 100
 # LOGGING CONFIGURATION
 # ============================================================================
 
-LOG_FILE_NAME = "bws_ng.log"
+LOG_FILE_NAME = "bws_ee.log"
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 LOG_MAX_BYTES = 10 * 1024 * 1024  # 10 MB

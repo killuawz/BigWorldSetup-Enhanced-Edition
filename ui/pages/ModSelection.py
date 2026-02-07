@@ -51,10 +51,11 @@ from core.enums.CategoryEnum import CategoryEnum
 from core.ModManager import ModManager
 from core.RuleManager import RuleManager
 from core.StateManager import StateManager
-from core.TranslationManager import get_supported_languages, tr
+from core.TranslationManager import get_supported_languages, get_translator, tr
 from core.ValidationOrchestrator import ValidationOrchestrator
 from core.WeiDULogParser import WeiDULogParser
 from ui.pages.BasePage import BasePage, ButtonConfig
+from ui.pages.mod_selection.AddModDialog import AddModDialog
 from ui.pages.mod_selection.ComponentContextMenu import ComponentContextMenu
 from ui.pages.mod_selection.ComponentSelector import ComponentSelector
 from ui.pages.mod_selection.ModDetailsPanel import ModDetailsPanel
@@ -500,6 +501,10 @@ class ModSelectionPage(BasePage):
         self._btn_export.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_export.clicked.connect(self._export_selection)
 
+        self._btn_add_custom = QPushButton()
+        self._btn_add_custom.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._btn_add_custom.clicked.connect(self._add_custom_mod)
+
         # Deselect all
         self._btn_deselect_all = QPushButton()
         self._btn_deselect_all.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -530,11 +535,11 @@ class ModSelectionPage(BasePage):
         sub_filters_layout.setSpacing(SPACING_SMALL)
 
         # Languages
-        self._lang_label = QLabel(tr("page.selection.desired_languages"))
+        self._lang_label = QLabel()
         sub_filters_layout.addWidget(self._lang_label)
 
-        self._lang_select = MultiSelectComboBox()
-        self._lang_select.setMinimumWidth(100)
+        self._lang_select = MultiSelectComboBox(show_text_selection=False)
+        self._lang_select.setMinimumWidth(120)
         self._lang_select.selection_changed.connect(self._apply_all_filters)
         sub_filters_layout.addWidget(self._lang_select)
 
@@ -1004,7 +1009,13 @@ class ModSelectionPage(BasePage):
 
     def get_additional_buttons(self) -> list[QPushButton]:
         """Get additional buttons."""
-        return [self._btn_select_all, self._btn_deselect_all, self._btn_import, self._btn_export]
+        return [
+            self._btn_select_all,
+            self._btn_deselect_all,
+            self._btn_import,
+            self._btn_export,
+            self._btn_add_custom,
+        ]
 
     def get_previous_button_config(self) -> ButtonConfig:
         """Configure previous button."""
@@ -1048,7 +1059,10 @@ class ModSelectionPage(BasePage):
         if not languages:
             languages = [code for code, _ in get_supported_languages()]
 
-        language_icons = {code: str(FLAGS_DIR / f"{code}.png") for code in languages}
+        language_icons = {
+            code: (get_translator().get_language_name(code), str(FLAGS_DIR / f"{code}.png"))
+            for code in languages
+        }
         self._lang_select.set_items(language_icons)
 
         selected_languages = self.state_manager.get_page_option(
@@ -1088,11 +1102,14 @@ class ModSelectionPage(BasePage):
 
     def retranslate_ui(self) -> None:
         """Update UI text for language change."""
+        self._lang_label.setText(tr("page.selection.desired_languages"))
         self._left_title.setText(tr("page.selection.select_category"))
         self._btn_export.setText(tr("page.selection.btn_export"))
         self._btn_import.setText(tr("page.selection.btn_import"))
         self._btn_deselect_all.setText(tr("page.selection.btn_deselect_all"))
         self._btn_select_all.setText(tr("page.selection.btn_select_all"))
+        self._btn_add_custom.setText(tr("page.selection.btn_add_custom_mod"))
+        self._btn_add_custom.setToolTip(tr("page.selection.btn_add_custom_mod_tooltip"))
         self._mod_details_title.setText(tr("page.selection.mod_details_title"))
         self._violation_title.setText(tr("page.selection.violation_title"))
         self._action_import_file.setText(tr("page.selection.action_import_file"))
@@ -1116,3 +1133,29 @@ class ModSelectionPage(BasePage):
         # Reapply filters to update display
         self._apply_all_filters()
         self._trigger_validation()
+
+    def _add_custom_mod(self) -> None:
+        """Open dialog to add a custom mod from .tp2 file."""
+        dialog = AddModDialog(self.state_manager, self)
+        dialog.mod_added.connect(self._on_custom_mod_added)
+        dialog.exec()
+
+    def _on_custom_mod_added(self, mod_id: str) -> None:
+        """Called when a custom mod is successfully added."""
+        logger.info(f"Custom mod added: {mod_id}")
+
+        mod_manager = self.state_manager.get_mod_manager()
+
+        if not mod_manager.add_mod(mod_id):
+            QMessageBox.critical(
+                self,
+                tr("error.title"),
+                tr("page.selection.failed_to_add_custom_mod", mod_id=mod_id),
+            )
+            return
+
+        self._component_selector.reload()
+        self._apply_all_filters()
+        self._update_statistics()
+
+        logger.info(f"Component selector reloaded with new mod: {mod_id}")

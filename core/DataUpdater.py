@@ -9,13 +9,18 @@ from PySide6.QtCore import QObject, Signal
 import requests
 
 from constants import (
+    CUSTOM_MODS_DIR,
     DATA_DIR,
+    DATA_SCHEMA_VERSION,
     DATA_VERSION_FILE,
     DATA_VERSION_URL,
     DATA_ZIP_URL,
     DOWNLOAD_CHUNK_SIZE,
     DOWNLOAD_TIMEOUT,
+    GAMES_DIR,
     MAX_RETRIES,
+    MODS_DIR,
+    RULES_DIR,
 )
 from core.TranslationManager import tr
 
@@ -30,7 +35,7 @@ class DataUpdater(QObject):
     update_error = Signal(str)  # error_message
 
     def check_for_updates(self) -> bool:
-        """Check if data updates are available."""
+        """Check if data updates are available and compatible."""
         try:
             remote_version = self._fetch_remote_version()
 
@@ -38,12 +43,17 @@ class DataUpdater(QObject):
                 logger.info("No remote version info available")
                 return False
 
+            if not self._is_data_compatible(remote_version):
+                logger.warning("Remote data schema is incompatible with this app version")
+                return False
+
             local_version = self._get_local_version()
             needs_update = self._is_update_needed(local_version, remote_version)
 
             logger.info(
                 f"Update {'available' if needs_update else 'not needed'}: "
-                f"{remote_version.get('commit_hash', 'unknown')}"
+                f"{remote_version.get('commit_hash', 'unknown')} "
+                f"(schema: {remote_version.get('data_schema_version', 'unknown')})"
             )
             return needs_update
 
@@ -52,11 +62,17 @@ class DataUpdater(QObject):
             return False
 
     def update_data(self) -> bool:
-        """Download and install data update."""
+        """Download and install data update while preserving custom mods."""
         backup_dir: Path | None = None
         temp_dir: Path | None = None
 
         try:
+            remote_version = self._fetch_remote_version()
+            if remote_version and not self._is_data_compatible(remote_version):
+                logger.error("Cannot update: incompatible data schema")
+                self.update_error.emit(tr("app.incompatible_data_schema"))
+                return False
+
             temp_dir = Path(tempfile.mkdtemp(prefix="bws_data_"))
             zip_path = temp_dir / "data.zip"
 
@@ -67,6 +83,9 @@ class DataUpdater(QObject):
                 self.update_error.emit(tr("app.downloaded_file_corrupted"))
                 return False
 
+            self.status_changed.emit(tr("app.backing_up_custom_mods"))
+            custom_backup = self._backup_custom_mods(temp_dir)
+
             self.status_changed.emit(tr("app.backing_up_existing_data"))
             backup_dir = self._create_backup()
 
@@ -75,10 +94,10 @@ class DataUpdater(QObject):
                 return False
 
             self.status_changed.emit(tr("app.installing_update"))
-            if not self._replace_data_directory(extract_dir):
+            if not self._replace_data_directory(extract_dir, custom_backup):
                 return False
 
-            if remote_version := self._fetch_remote_version():
+            if remote_version:
                 self._save_local_version(remote_version)
 
             self.status_changed.emit(tr("app.update_complete"))
@@ -97,6 +116,32 @@ class DataUpdater(QObject):
             for directory in (backup_dir, temp_dir):
                 if directory and directory.exists():
                     shutil.rmtree(directory, ignore_errors=True)
+
+    @staticmethod
+    def _is_data_compatible(remote_version: dict) -> bool:
+        """Check if remote data schema is compatible with this app version."""
+        remote_schema = remote_version.get("data_schema_version")
+
+        if not remote_schema:
+            logger.warning("Remote data has no schema version - assuming compatible")
+            return True
+
+        try:
+            app_major = DATA_SCHEMA_VERSION.split(".")[0]
+            remote_major = remote_schema.split(".")[0]
+            is_compatible = app_major == remote_major
+
+            logger.info(
+                f"Schema compatibility check: "
+                f"App={DATA_SCHEMA_VERSION} vs Remote={remote_schema} → "
+                f"{'Compatible' if is_compatible else 'Incompatible'}"
+            )
+
+            return is_compatible
+
+        except (IndexError, AttributeError) as e:
+            logger.error(f"Invalid schema version format: {e}")
+            return False
 
     @staticmethod
     def _fetch_remote_version() -> dict | None:
@@ -220,6 +265,26 @@ class DataUpdater(QObject):
             return False
 
     @staticmethod
+    def _backup_custom_mods(temp_dir: Path) -> Path | None:
+        """Backup custom mods directory to temporary location."""
+        if not CUSTOM_MODS_DIR.exists() or not any(CUSTOM_MODS_DIR.iterdir()):
+            logger.info("No custom mods to backup")
+            return None
+
+        try:
+            custom_backup = temp_dir / "custom_backup"
+            shutil.copytree(CUSTOM_MODS_DIR, custom_backup)
+
+            custom_count = len(list(custom_backup.glob("*.json")))
+            logger.info(f"Backed up {custom_count} custom mods to {custom_backup}")
+
+            return custom_backup
+
+        except Exception as e:
+            logger.error(f"Failed to backup custom mods: {e}")
+            return None
+
+    @staticmethod
     def _create_backup() -> Path | None:
         """Create backup of current data directory."""
         if not DATA_DIR.exists():
@@ -247,15 +312,49 @@ class DataUpdater(QObject):
         except Exception as e:
             logger.error(f"Failed to restore backup: {e}")
 
-    def _replace_data_directory(self, new_data_dir: Path) -> bool:
-        """Atomically replace data directory."""
+    def _replace_data_directory(self, new_data_dir: Path, custom_backup: Path | None) -> bool:
+        """Replace data directory while preserving custom mods."""
         try:
-            if DATA_DIR.exists():
-                shutil.rmtree(DATA_DIR)
-            shutil.copytree(new_data_dir, DATA_DIR)
+            official_dirs = [MODS_DIR, GAMES_DIR, RULES_DIR]
+
+            for official_dir in official_dirs:
+                if official_dir.exists():
+                    logger.info(f"Removing official directory: {official_dir}")
+                    shutil.rmtree(official_dir)
+
+            logger.info(f"Copying new data from {new_data_dir} to {DATA_DIR}")
+
+            for item in new_data_dir.iterdir():
+                dest = DATA_DIR / item.name
+
+                if item.is_dir():
+                    if dest.exists():
+                        shutil.rmtree(dest)
+                    shutil.copytree(item, dest)
+                    logger.info(f"Copied directory: {item.name}")
+                else:
+                    shutil.copy2(item, dest)
+                    logger.info(f"Copied file: {item.name}")
+
+            if custom_backup and custom_backup.exists():
+                logger.info("Restoring custom mods")
+
+                CUSTOM_MODS_DIR.mkdir(parents=True, exist_ok=True)
+
+                for custom_mod in custom_backup.glob("*.json"):
+                    dest = CUSTOM_MODS_DIR / custom_mod.name
+                    shutil.copy2(custom_mod, dest)
+                    logger.info(f"Restored custom mod: {custom_mod.name}")
+
+                custom_count = len(list(CUSTOM_MODS_DIR.glob("*.json")))
+                logger.info(f"Restored {custom_count} custom mods")
+            else:
+                logger.info("No custom mods to restore")
+
             self.progress.emit(100)
             return True
+
         except Exception as e:
-            logger.error(f"Failed to replace data directory: {e}")
+            logger.error(f"Failed to replace data directory: {e}", exc_info=True)
             self.update_error.emit(f"Installation failed: {str(e)}")
             return False
