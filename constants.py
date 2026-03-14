@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt
 # ============================================================================
 
 APP_NAME = "Big World Setup - Next Generation"
-APP_VERSION = "0.9.10-beta"
+APP_VERSION = "0.9.11-beta"
 APP_ORG = "Selphira"
 
 DATA_SCHEMA_VERSION = "1.0"
@@ -215,9 +215,9 @@ USER_AGENT = f"{APP_NAME}/{APP_VERSION}"
 
 # GitHub Configuration
 GITHUB_REPO_OWNER = "selphira"
-GITHUB_REPO_NAME = "BigWorldSetup-Enhanced-Edition"
+GITHUB_REPO_NAME = "BigWorldSetup-Next-Generation"
 GITHUB_API_BASE = "https://api.github.com"
-GITHUB_PAGES_BASE = "https://selphira.github.io/BigWorldSetup-Enhanced-Edition"
+GITHUB_PAGES_BASE = "https://selphira.github.io/BigWorldSetup-Next-Generation"
 
 # Data Update Configuration
 DATA_VERSION_FILE = CACHE_DIR / "data_version.json"
